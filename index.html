@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyFlix - Netflix-like Movie Display</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      padding: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .movie {
+      border: 1px solid #333;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header class="container">
+    <h1>MyFlix</h1>
+    <label for="searchBar">Search movies:</label>
+    <input type="text" id="searchBar" placeholder="Search movies...">
+  </header>
+  <div class="container grid" id="moviesGrid"></div>
+  <footer class="container">
+    &copy; 2021 MyFlix | All rights reserved
+  </footer>
+
+  <script>
+    const apiKey = '1a501fcb';
+
+    async function fetchMovies() {
+      const response = await fetch(`http://www.omdbapi.com/?apikey=${apiKey}&s=star wars`);
+      const data = await response.json();
+      return data.Search;
+    }
+
+    function displayMovies(movies) {
+      const moviesGrid = document.getElementById('moviesGrid');
+      movies.forEach(movie => {
+        const movieElement = document.createElement('div');
+        movieElement.classList.add('movie');
+        movieElement.innerHTML = `
+          <img src="${movie.Poster}" alt="${movie.Title}">
+          <h3>${movie.Title}</h3>
+          <p>${movie.Year}</p>
+        `;
+        moviesGrid.appendChild(movieElement);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      const movies = await fetchMovies();
+      displayMovies(movies);
+    });
+  </script>
+
+</body>
+</html>
